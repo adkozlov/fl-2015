@@ -1,0 +1,207 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[english,russian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{listings,comment,hyperref,listings,verbatim,amssymb}
+\usepackage[nohead]{geometry}
+\usepackage{pgfplots}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{Домашнее задание №1}
+\author{Андрей Козлов}
+\date{\today}
+
+\maketitle
+
+\begin{enumerate}
+	\item {
+	\begin{enumerate}
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial] (A) {$A$};
+			\node[state] (B) [right of=A] {$B$};
+			\node[state] (C) [right of=B] {$C$};
+			\node[state,accepting] (D) [right of=C] {$D$};
+
+			\path (A) edge [bend right] node {0} (B)
+			edge [loop above] node {1} (A)
+			(B) edge [loop above] node {0} (B)
+			edge [bend right] node {1} (C)
+			(C) edge [bend right] node {0} (B)
+			edge [bend right] node {1} (D)
+			(D) edge [loop above] node {0, 1} (D);
+		\end{tikzpicture} }
+
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial] (A) {$A$};
+			\node[state] (B) [right of=A] {$B$};
+			\node[state,accepting] (C) [right of=B] {$C$};
+			\node[state] (D) [below of=A] {$D$};
+			\node[state] (E) [right of=D] {$E$};
+			\node[state,accepting] (F) [right of=E] {$F$};
+
+			\path (A) edge [bend left] node {0} (B)
+			edge [bend right] node {1} (D)
+			(B) edge [bend right] node {0} (E)
+			edge [bend left] node {1} (C)
+			(C) edge [loop below] node {0, 1} (C)
+			(D) edge [bend left] node {0} (E)
+			edge [loop above] node {1} (D)
+			(E) edge [loop above] node {0} (E)
+			edge [bend left] node {1} (F)
+			(F) edge [bend left] node {0} (E)
+			edge [bend left] node {1} (D);
+		\end{tikzpicture} }
+
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial,accepting] (A) {$A$};
+			\node[state,accepting] (B) [above right of=A] {$B$};
+			\node[state,accepting] (C) [right of=B] {$C$};
+			\node[state,accepting] (D) [right of=C] {$D$};
+			\node[state,accepting] (E) [right of=D] {$E$};
+			\node[state,accepting] (F) [below right of=A] {$F$};
+			\node[state,accepting] (G) [right of=F] {$G$};
+			\node[state,accepting] (H) [right of=G] {$H$};
+			\node[state,accepting] (I) [right of=H] {$I$};
+			\node[state] (J) [below right of=E] {$J$};
+
+			\path (A) edge [bend left] node {0} (B)
+			edge [bend right] node {1} (F)
+			(B) edge [bend left] node {0} (C)
+			edge [bend left] node {1} (F)
+			(C) edge [bend left] node {0} (D)
+			edge [bend left] node {1} (F)
+			(D) edge [bend left] node {0} (E)
+			edge [bend left] node {1} (F)
+			(E) edge [bend left] node {0} (J)
+			edge [bend left] node {1} (F)
+			(F) edge [bend left] node {0} (B)
+			edge [bend right] node {1} (G)
+			(G) edge [bend right] node {0} (B)
+			edge [bend right] node {1} (H)
+			(H) edge [bend right] node {0} (B)
+			edge [bend right] node {1} (I)
+			(I) edge [bend right] node {0} (B)
+			edge [bend right] node {1} (J)
+			(J) edge [loop left] node {0, 1} (J);
+		\end{tikzpicture} }
+	\end{enumerate} }
+
+	\item {
+	\begin{enumerate}
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial] (A) {$A$};
+			\node[state] (B) [above right of=A] {$B$};
+			\node[state] (C) [right of=B] {$C$};
+			\node[state] (D) [right of=C] {$D$};
+			\node[state] (E) [right of=D] {$E$};
+			\node[state,accepting] (F) [below right of=E] {$F$};
+
+			\path (A) edge [bend left] node {0} (B)
+			edge [loop below] node {1} (A)
+			(B) edge node {0, 1} (C)
+			edge [bend left] node {$\varepsilon$} (E)
+			(C) edge node {0, 1} (D)
+			(D) edge node {0, 1} (E)
+			(E) edge [bend left] node {0} (F)
+			edge [bend left] node {$\varepsilon$} (B)
+			(F) edge [loop below] node {0, 1} (F);
+		\end{tikzpicture} }
+
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial] (A) {$A$};
+			\node[state] (B) [above right of=A] {$B$};
+			\node[state] (C) [right of=B] {$C$};
+			\node[state,accepting] (D) [right of=C] {$D$};
+			\node[state] (E) [below right of=A] {$E$};
+			\node[state] (F) [right of=E] {$F$};
+			\node[state] (G) [right of=F] {$G$};
+			\node[state,accepting] (H) [right of=G] {$H$};
+			
+			\path (A) edge [bend left] node {$\varepsilon$} (B)
+			edge [bend right] node {$\varepsilon$} (E)
+			(B) edge [bend left] node {0} (C)
+			(C) edge [bend left] node {1} (D)
+			(D) edge [bend left] node {$\varepsilon$} (B)
+			(E) edge [bend right] node {0} (F)
+			(F) edge [bend right] node {1} (G)
+			(G) edge [bend right] node {0} (H)
+			(H) edge [bend right] node {$\varepsilon$} (E);
+		\end{tikzpicture} }
+
+		\item {
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+			\node[state,initial] (A) {$A$};
+			\node[state] (B) [above right of=A] {$B$};
+			\node[state] (C) [right of=B] {$C$};
+			\node[state] (D) [right of=C] {$D$};
+			\node[state,accepting] (E) [below right of=A] {$E$};
+			\node[state] (F) [right of=E] {$F$};
+			\node[state] (G) [right of=F] {$G$};
+			\node[state] (H) [below right of=C] {$H$};
+			\node[state,accepting] (I) [right of=H] {$I$};
+
+			\path (A) edge [bend left] node {0} (B)
+			edge [bend right] node {1} (E)
+			(B) edge [bend left] node {0} (C)
+			edge [bend right] node {1} (E)
+			(C) edge [bend right] node {0} (H)
+			edge [bend right] node {1} (E)
+			(D) edge [bend left] node {1} (I)
+			(H) edge [loop right] node {0, 1} (H)
+			edge [bend left] node {$\varepsilon$} (D)
+			edge [bend right] node {$\varepsilon$} (F)
+			(F) edge [bend right] node {1} (G)
+			(G) edge [bend right] node {0} (I);
+		\end{tikzpicture} }
+	\end{enumerate} }
+
+	\item {
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,semithick]
+		\node[state,initial] (A) {$\{A, B, E\}$};
+		\node[state] (B) [below of=A] {$\{C, F\}$};
+		\node[state,accepting] (C) [below of=B] {$\{B, D, G\}$};
+		\node[state,accepting] (D) [below of=C] {$\{C, E, H\}$};
+		\node[state] (E) [below left of=D] {$\{F\}$};
+		\node[state] (F) [below of=E] {$\{G\}$};
+		\node[state,accepting] (G) [below of=F] {$\{E, H\}$};
+		\node[state,accepting] (H) [below right of=D] {$\{B, D\}$};
+		\node[state] (I) [below of=H] {$\{C\}$};
+		\node[state] (J) [above left of=E] {$\{\varnothing\}$};
+
+		\path (A) edge [bend left] node {0} (B)
+		edge [bend right] node {1} (J)
+		(B) edge [bend left] node {1} (C)
+		edge [bend right] node {0} (J)
+		(C) edge [bend left] node {0} (D)
+		edge [bend right] node {1} (J)
+		(D) edge [bend right] node {0} (E)
+		edge [bend left] node {1} (H)
+		(E) edge [bend right] node {1} (F)
+		edge [bend left] node {0} (J)
+		(F) edge [bend right] node {0} (G)
+		edge [bend left] node {1} (J)
+		(G) edge [bend right] node {0} (E)
+		edge [bend left] node {1} (J)
+		(H) edge [bend left] node {0} (I)
+		edge [bend left] node {1} (J)
+		(I) edge [bend left] node {1} (H)
+		edge [bend left] node {0} (J);
+	\end{tikzpicture} }
+
+	\item {Полученный автомат является минимальным.}
+	
+\end{enumerate}
+
+\end{document}
