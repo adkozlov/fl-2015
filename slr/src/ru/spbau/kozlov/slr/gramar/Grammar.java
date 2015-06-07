@@ -14,22 +14,24 @@ public class Grammar {
     private final String grammarName;
     private final String grammarPackage;
 
+    private final int originalStartSymbolCode;
     private final int startSymbolCode;
     private final int nonTerminalsCount;
     private final ArrayList<ArrayList<Production>> productions;
 
     private GrammarInformation grammarInformation;
 
-    public Grammar(String grammarName, String grammarPackage, int startSymbolCode, int nonTerminalsCount, ArrayList<ArrayList<Production>> productions) {
+    public Grammar(String grammarName, String grammarPackage, int originalStartSymbolCode, int startSymbolCode, int nonTerminalsCount, ArrayList<ArrayList<Production>> productions) {
         this.grammarName = grammarName;
         this.grammarPackage = grammarPackage;
+        this.originalStartSymbolCode = originalStartSymbolCode;
         this.startSymbolCode = startSymbolCode;
         this.nonTerminalsCount = nonTerminalsCount;
         this.productions = productions;
     }
 
     protected Grammar(Grammar grammar) {
-        this(grammar.grammarName, grammar.grammarPackage, grammar.startSymbolCode, grammar.nonTerminalsCount, grammar.productions);
+        this(grammar.grammarName, grammar.grammarPackage, grammar.originalStartSymbolCode, grammar.startSymbolCode, grammar.nonTerminalsCount, grammar.productions);
     }
 
     public String getGrammarName() {
@@ -51,8 +53,33 @@ public class Grammar {
         return grammarInformation;
     }
 
-    private boolean isTerminal(int symbol) {
+    protected int getProductionsCount() {
+        return productions.size();
+    }
+
+    protected ArrayList<Production> getProductions(int symbol) {
+        return productions.get(symbol);
+    }
+
+    protected int getOriginalStartSymbolCode() {
+        return originalStartSymbolCode;
+    }
+
+    protected int getStartSymbolCode() {
+        return startSymbolCode;
+    }
+
+    protected int getNonTerminalsCount() {
+        return nonTerminalsCount;
+    }
+
+    protected boolean isTerminal(int symbol) {
         return symbol >= nonTerminalsCount;
+    }
+
+    @Override
+    public String toString() {
+        return "grammar name: " + grammarName + System.lineSeparator() + "grammar package: " + grammarPackage + System.lineSeparator();
     }
 
     private ArrayList<Boolean> getNullable() {
@@ -70,7 +97,7 @@ public class Grammar {
                     continue;
                 }
 
-                for (Production production : productions.get(i)) {
+                for (Production production : getProductions(i)) {
                     boolean isNullable = true;
                     for (int j : production.getRightSide()) {
                         if (isTerminal(j) || !result.get(j)) {
@@ -98,7 +125,7 @@ public class Grammar {
             isNotFinished = false;
 
             for (int i = 0; i < nonTerminalsCount; i++) {
-                for (Production production : productions.get(i)) {
+                for (Production production : getProductions(i)) {
                     for (int j : production.getRightSide()) {
                         if (isTerminal(j)) {
                             isNotFinished |= result.get(i).add(j);

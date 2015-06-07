@@ -4,11 +4,14 @@ import ru.spbau.kozlov.slr.gramar.EnrichedGrammar;
 import ru.spbau.kozlov.slr.gramar.Grammar;
 import ru.spbau.kozlov.slr.gramar.model.Attribute;
 import ru.spbau.kozlov.slr.gramar.model.Production;
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedEOFException;
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedEOLException;
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedTokenException;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +50,7 @@ public class GrammarParser {
     public EnrichedGrammar getEnrichedGrammar() throws UnexpectedEOLException, UnexpectedTokenException, UnexpectedEOFException, IOException {
         if (enrichedGrammar == null) {
             Grammar grammar = getGrammar();
-            enrichedGrammar = new EnrichedGrammar(grammar, symbolCodes, symbolNames, symbolAttributes);
+            enrichedGrammar = new EnrichedGrammar(grammar, symbolNames, symbolAttributes);
         }
         return enrichedGrammar;
     }
@@ -69,10 +72,13 @@ public class GrammarParser {
         }
         readProductions(grammarTokenizer); // productions
 
+        // TODO check last production
         String startSymbolName = readProperty(grammarTokenizer, "start"); // start symbol
-        symbolProductions.get(startSymbolCode).add(new Production(Arrays.asList(symbolCodes.get(startSymbolName)), new ArrayList<>()));
+        int originalStartSymbolCode = symbolCodes.get(startSymbolName);
+        symbolProductions.get(startSymbolCode).add(
+                new Production(Collections.singletonList(originalStartSymbolCode), new ArrayList<>()));
 
-        return new Grammar(grammarName, grammarPackage, startSymbolCode, nonTerminalsCount, symbolProductions);
+        return new Grammar(grammarName, grammarPackage, originalStartSymbolCode, startSymbolCode, nonTerminalsCount, symbolProductions);
     }
 
     private static String readProperty(GrammarTokenizer grammarTokenizer, String propertyName) throws IOException, UnexpectedEOFException, UnexpectedEOLException, UnexpectedTokenException {

@@ -1,5 +1,9 @@
 package ru.spbau.kozlov.slr.parser;
 
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedEOFException;
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedEOLException;
+import ru.spbau.kozlov.slr.parser.exceptions.UnexpectedTokenException;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;

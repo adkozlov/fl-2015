@@ -1,4 +1,4 @@
-package ru.spbau.kozlov.slr.parser;
+package ru.spbau.kozlov.slr.parser.exceptions;
 
 import java.util.Set;
 

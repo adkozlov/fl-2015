@@ -22,6 +22,10 @@ public class Production implements Comparable<Production> {
         PRODUCTION_LIST.add(this);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public ArrayList<Integer> getRightSide() {
         return rightSide;
     }
