@@ -11,7 +11,7 @@ F Factor { int value }
 * Multiply
 ( LeftParenthesis
 ) RightParenthesis
-int Integer { int value , boolean isZero }
+int Integer { int value }
 
 E -> T {
   $0.value
@@ -33,6 +33,9 @@ F -> - int {
 }
 F -> ( E ) {
   $1.value
+}
+F -> - ( E ) {
+  -$2.value
 }
 
 start E
