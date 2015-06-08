@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class Automaton {
 
-    private static class State {
+    public static class State {
 
         private final TreeSet<Item> state;
         private final int[] step;
@@ -34,6 +34,14 @@ public class Automaton {
 
     private final ArrayList<State> states;
     private final ArrayList<Item[]> reduces = new ArrayList<>();
+
+    public ArrayList<State> getStates() {
+        return states;
+    }
+
+    public ArrayList<Item[]> getReduces() {
+        return reduces;
+    }
 
     private Automaton(ArrayList<State> states, GrammarInformation grammarInformation, int symbolsCount) throws ShiftReduceConflictException, ReduceReduceConflictException {
         this.states = states;

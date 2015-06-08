@@ -32,6 +32,10 @@ public class EnrichedGrammar extends Grammar {
         return automaton;
     }
 
+    public ArrayList<ArrayList<Attribute>> getSymbolAttributes() {
+        return symbolAttributes;
+    }
+
     public String getSymbolName(int i) {
         return symbolNames.get(i);
     }

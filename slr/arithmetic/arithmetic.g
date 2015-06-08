@@ -1,17 +1,17 @@
 grammar ArithmeticExpressions
 
-package ru.spbau.kozlov.slr
+package ru.spbau.kozlov.slr.arithmetic
 
-E expression { int value }
-T term { int value }
-F factor { int value }
+E Expression { int value }
+T Term { int value }
+F Factor { int value }
 
-+ PLUS
-- MINUS
-* MULTIPLY
-( LEFT_PARENTHESIS
-) RIGHT_PARENTHESIS
-int INTEGER { int value , boolean isZero }
++ Plus
+- Minus
+* Multiply
+( LeftParenthesis
+) RightParenthesis
+int Integer { int value , boolean isZero }
 
 E -> T {
   $0.value

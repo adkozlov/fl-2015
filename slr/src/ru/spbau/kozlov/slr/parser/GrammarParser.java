@@ -22,20 +22,17 @@ public class GrammarParser {
 
     private final Path path;
 
-    private final Map<String, Integer> symbolCodes;
-    private final ArrayList<String> symbolNames;
-    private final ArrayList<ArrayList<Attribute>> symbolAttributes;
-    private final ArrayList<ArrayList<Production>> symbolProductions;
+    private final Map<String, Integer> symbolCodes = new HashMap<>();
+    private final ArrayList<String> symbolNames = new ArrayList<>();
+    private final ArrayList<ArrayList<Attribute>> symbolAttributes = new ArrayList<>();
+    private final ArrayList<ArrayList<Production>> symbolProductions = new ArrayList<>();
+    private final Map<String, String> terminalsMap = new HashMap<>();
 
     private Grammar grammar;
     private EnrichedGrammar enrichedGrammar;
 
     public GrammarParser(Path path) throws IOException {
         this.path = path;
-        symbolCodes = new HashMap<>();
-        symbolNames = new ArrayList<>();
-        symbolAttributes = new ArrayList<>();
-        symbolProductions = new ArrayList<>();
     }
 
     public Grammar getGrammar() throws UnexpectedTokenException, UnexpectedEOLException, IOException, UnexpectedEOFException {
@@ -59,26 +56,25 @@ public class GrammarParser {
         String grammarName = readProperty(grammarTokenizer, "grammar"); // name
         String grammarPackage = readProperty(grammarTokenizer, "package"); // package
 
-        readGrammarItems(grammarTokenizer); // non-terminals
+        readGrammarItems(grammarTokenizer, false); // non-terminals
 
         int startSymbolCode = symbolNames.size();
         addGrammarItem("!start", new ArrayList<>());
 
         int nonTerminalsCount = symbolNames.size();
-        readGrammarItems(grammarTokenizer); // terminals
+        readGrammarItems(grammarTokenizer, true); // terminals
 
         for (int i = 0; i < nonTerminalsCount; i++) {
             symbolProductions.add(new ArrayList<>());
         }
         readProductions(grammarTokenizer); // productions
 
-        // TODO check last production
         String startSymbolName = readProperty(grammarTokenizer, "start"); // start symbol
         int originalStartSymbolCode = symbolCodes.get(startSymbolName);
         symbolProductions.get(startSymbolCode).add(
                 new Production(Collections.singletonList(originalStartSymbolCode), new ArrayList<>()));
 
-        return new Grammar(grammarName, grammarPackage, originalStartSymbolCode, startSymbolCode, nonTerminalsCount, symbolProductions);
+        return new Grammar(grammarName, grammarPackage, originalStartSymbolCode, startSymbolCode, nonTerminalsCount, symbolProductions, terminalsMap);
     }
 
     private static String readProperty(GrammarTokenizer grammarTokenizer, String propertyName) throws IOException, UnexpectedEOFException, UnexpectedEOLException, UnexpectedTokenException {
@@ -87,12 +83,18 @@ public class GrammarParser {
         return grammarTokenizer.nextToken();
     }
 
-    private void readGrammarItems(GrammarTokenizer grammarTokenizer) throws IOException, UnexpectedEOFException, UnexpectedEOLException, UnexpectedTokenException {
+    private void readGrammarItems(GrammarTokenizer grammarTokenizer, boolean isTerminal) throws IOException, UnexpectedEOFException, UnexpectedEOLException, UnexpectedTokenException {
         grammarTokenizer.nextLines();
 
         while (grammarTokenizer.ready()) {
-            symbolCodes.put(grammarTokenizer.nextToken(), symbolNames.size());
-            addGrammarItem(grammarTokenizer.nextToken(), readAttributes(grammarTokenizer));
+            String value = grammarTokenizer.nextToken();
+            String key = grammarTokenizer.nextToken();
+            if (isTerminal) {
+                terminalsMap.put(key, value);
+            }
+
+            symbolCodes.put(value, symbolNames.size());
+            addGrammarItem(key, readAttributes(grammarTokenizer));
 
             grammarTokenizer.nextLine();
         }

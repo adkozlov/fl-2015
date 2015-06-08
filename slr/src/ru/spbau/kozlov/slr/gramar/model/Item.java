@@ -37,6 +37,10 @@ public class Item implements Comparable<Item> {
         return production.getId();
     }
 
+    public ArrayList<String> getProductionActions() {
+        return production.getActions();
+    }
+
     public int getSymbolAfterDot() {
         return getRightSide().get(dot);
     }

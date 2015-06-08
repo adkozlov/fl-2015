@@ -1,6 +1,6 @@
 package ru.spbau.kozlov.slr;
 
-import ru.spbau.kozlov.slr.gramar.Automaton;
+import ru.spbau.kozlov.slr.generator.SourceFilesGenerator;
 import ru.spbau.kozlov.slr.gramar.EnrichedGrammar;
 import ru.spbau.kozlov.slr.gramar.exceptions.AbstractConflictException;
 import ru.spbau.kozlov.slr.parser.GrammarParser;
@@ -13,11 +13,11 @@ public class Main {
 
     public static void main(String[] args) {
 	    try {
-            GrammarParser grammarParser = new GrammarParser(Paths.get("arithmetic.g"));
+            GrammarParser grammarParser = new GrammarParser(Paths.get(args[0]));
             EnrichedGrammar enrichedGrammar = grammarParser.getEnrichedGrammar();
-            System.out.println(enrichedGrammar);
 
-            Automaton automaton = Automaton.createAutomaton(enrichedGrammar);
+            SourceFilesGenerator sourceFilesGenerator = new SourceFilesGenerator(enrichedGrammar);
+            sourceFilesGenerator.generateSourceFiles();
         } catch (IOException | AbstractParserException | AbstractConflictException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }

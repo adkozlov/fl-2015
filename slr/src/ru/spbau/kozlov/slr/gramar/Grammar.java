@@ -4,6 +4,7 @@ import ru.spbau.kozlov.slr.gramar.model.Production;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,19 +20,38 @@ public class Grammar {
     private final int nonTerminalsCount;
     private final ArrayList<ArrayList<Production>> productions;
 
+    private final Map<String, String> terminalsMap;
+
     private GrammarInformation grammarInformation;
 
-    public Grammar(String grammarName, String grammarPackage, int originalStartSymbolCode, int startSymbolCode, int nonTerminalsCount, ArrayList<ArrayList<Production>> productions) {
+    public Grammar(String grammarName,
+                   String grammarPackage,
+                   int originalStartSymbolCode,
+                   int startSymbolCode,
+                   int nonTerminalsCount,
+                   ArrayList<ArrayList<Production>> productions,
+                   Map<String, String> terminalsMap) {
         this.grammarName = grammarName;
         this.grammarPackage = grammarPackage;
         this.originalStartSymbolCode = originalStartSymbolCode;
         this.startSymbolCode = startSymbolCode;
         this.nonTerminalsCount = nonTerminalsCount;
         this.productions = productions;
+        this.terminalsMap = terminalsMap;
     }
 
     protected Grammar(Grammar grammar) {
-        this(grammar.grammarName, grammar.grammarPackage, grammar.originalStartSymbolCode, grammar.startSymbolCode, grammar.nonTerminalsCount, grammar.productions);
+        this(grammar.grammarName,
+                grammar.grammarPackage,
+                grammar.originalStartSymbolCode,
+                grammar.startSymbolCode,
+                grammar.nonTerminalsCount,
+                grammar.productions,
+                grammar.terminalsMap);
+    }
+
+    public String getToken(String symbolName) {
+        return terminalsMap.get(symbolName);
     }
 
     public String getGrammarName() {
@@ -57,7 +77,7 @@ public class Grammar {
         return productions.size();
     }
 
-    protected ArrayList<Production> getProductions(int symbol) {
+    public ArrayList<Production> getProductions(int symbol) {
         return productions.get(symbol);
     }
 
@@ -65,15 +85,15 @@ public class Grammar {
         return originalStartSymbolCode;
     }
 
-    protected int getStartSymbolCode() {
+    public int getStartSymbolCode() {
         return startSymbolCode;
     }
 
-    protected int getNonTerminalsCount() {
+    public int getNonTerminalsCount() {
         return nonTerminalsCount;
     }
 
-    protected boolean isTerminal(int symbol) {
+    public boolean isTerminal(int symbol) {
         return symbol >= nonTerminalsCount;
     }
 
